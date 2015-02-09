@@ -1,9 +1,14 @@
 package eu.inginea.guicekata.gameoflife.test
+
+import com.google.inject.Guice
+import com.google.inject.Injector
+import eu.inginea.guicekata.gameoflife.guice.MainGuiceModule
 import spock.lang.*
 import eu.inginea.guicekata.gameoflife.LifeBoard
 
 class GameOfLifeSpec extends Specification {
   // fields
+    def Injector guiceInjector = Guice.createInjector(new MainGuiceModule())
   // fixture methods
   // feature methods
   
@@ -26,13 +31,21 @@ class GameOfLifeSpec extends Specification {
             
         then:
             def middlePoint = middlePointOf lifeBoard
-            lifeBoard.valueAt(middlePoint) == seed[0,0]
+            lifeBoard.valueAt(middlePoint) == seed[0][0]
+            lifeBoard.valueAt(middlePoint.right()) == seed[0][1]
+            lifeBoard.valueAt(middlePoint.right(2)) == seed[0][2]
+            lifeBoard.valueAt(middlePoint.down()) == seed[1][0]
+            lifeBoard.valueAt(middlePoint.down().right()) == seed[1][1]
+            lifeBoard.valueAt(middlePoint.down().right(2)) == seed[1][2]
+            lifeBoard.valueAt(middlePoint.down().down()) == seed[2][0]
+            lifeBoard.valueAt(middlePoint.down().down().right()) == seed[2][1]
+            lifeBoard.valueAt(middlePoint.down().down().right(2)) == seed[2][2]
     }
-    
+
     // helper methods
   
     def initialLifeboard() {
-        def lifeBoard = new LifeBoard()
+        def lifeBoard = guiceInjector.getInstance(LifeBoard)
     }
     
     def simpleSeed() {
@@ -64,7 +77,7 @@ class GameOfLifeSpec extends Specification {
         seed.each() {
             def pointCoord = lineOffset
             it.each() {
-                lifeBoard.put(pointCoord)
+                if (it) lifeBoard.put(pointCoord)
                 pointCoord = pointCoord.right()
             }
             lineOffset = lineOffset.down()

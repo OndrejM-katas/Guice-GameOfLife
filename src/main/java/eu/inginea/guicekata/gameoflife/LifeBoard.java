@@ -5,29 +5,35 @@
  */
 package eu.inginea.guicekata.gameoflife;
 
+import javax.inject.Inject;
+
 /**
  *
  * @author media
  */
 public class LifeBoard {
-    private int height = 10;
-    private int width = 10;
+
+    @Inject
+    private BoardSnapshot boardSnapshot;
 
     public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
+        return boardSnapshot.getHeight();
     }
 
     public int getWidth() {
-        return width;
+        return boardSnapshot.getWidth();
     }
 
-    public void setWidth(int width) {
-        this.width = width;
+    public BoardCoordinate getTopLeft() {
+        return new BoardCoordinate();
     }
-    
-    
+
+    public void put(BoardCoordinate where) {
+        boardSnapshot.setFilledAt(where, true);
+    }
+
+    public boolean valueAt(BoardCoordinate where) {
+        return boardSnapshot.isFilledAt(where);
+    }
+
 }

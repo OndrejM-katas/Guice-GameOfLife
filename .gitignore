@@ -2,6 +2,10 @@
 
 # Gradle temp dir
 .gradle
+.nb-gradle
+
+# Idea temp files
+.idea
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
